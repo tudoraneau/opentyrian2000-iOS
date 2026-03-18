@@ -26,7 +26,6 @@
 #include "opentyr.h"
 #include "video.h"
 
-#include <assert.h>
 #include <string.h>
 
 const JE_byte menuHelp[MENU_MAX][11] = /* [1..maxmenu, 1..11] */
@@ -109,7 +108,8 @@ void read_encrypted_pascal_string(char *s, size_t size, FILE *f)
 
 	decrypt_string(buffer, len);
 
-	assert(len < size);
+	if (len >= size)
+		fprintf(stderr, "warning: unexpected helptext string size (%u >= %zu)\n", (unsigned)len, size);
 
 	len = MIN(len, size - 1);
 	memcpy(s, buffer, len);
